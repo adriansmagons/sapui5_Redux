@@ -1,0 +1,36 @@
+
+<FlexBox xmlns="sap.m" >
+    <FlexBox alignItems="Center" justifyContent="Center">
+        <IconTabBar 
+                id="idNavigationBar"
+                class="sapUiResponsiveContentPadding"
+                select=".onSelectTab"
+                expandable="false"
+                expanded="false">
+                <items>
+                    <IconTabFilter
+                        icon="sap-icon://home"
+                        key="Startpage">
+                    </IconTabFilter>
+                    <IconTabFilter
+                        icon="sap-icon://customer"
+                        key="Profile">
+                    </IconTabFilter>
+                    <IconTabFilter
+                        icon="sap-icon://notes"
+                        key="Exercise">
+                    </IconTabFilter>
+                    <IconTabFilter 
+                        icon="sap-icon://group"
+                        key="people">
+                    </IconTabFilter>
+                </items>
+            
+    </IconTabBar>
+            <layoutData>
+                <FlexItemData growFactor="4" />
+            </layoutData>
+    </FlexBox>
+    
+</FlexBox>
+    
