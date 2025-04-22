@@ -1,17 +1,12 @@
 sap.ui.define([], function() {
     
-    function uiStateReducer (state = {a: "something"}, action) {
+    function uiStateReducer (state = {}, action) {
             switch (action.type) {
                 case "NAVIGATE_TO":{
 
                     return{
                         ...state,
-                        [action.payload.oldView]: {
-                            visible: false
-                        },
-                        [action.payload.view]: {
-                            visible: true
-                        }
+                        activeRoute: action.payload.sTargetRoute
                     }
                 }
                 default: 

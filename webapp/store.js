@@ -5,7 +5,7 @@ sap.ui.define(["sap/ui/base/Object",
 
     return BaseObject.extend("ui5.fitnessApp.store", {
         constructor: function (initialState) {
-            this.store = Redux.createStore(rootReducer, initialState);
+            this.store = Redux.createStore(rootReducer, initialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
         }
     })
  });

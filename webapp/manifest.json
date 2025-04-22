@@ -64,11 +64,6 @@
           "target": "profile"
         },
         {
-          "pattern": "athleteDetails",
-          "name": "athleteDetails",
-          "target": "athleteDetails"
-        },
-        {
           "pattern": "athleteDetails/{athletePath}",
           "name": "athleteDetails",
           "target": "athleteDetails"

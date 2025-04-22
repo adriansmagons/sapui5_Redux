@@ -11,21 +11,23 @@ sap.ui.define([
         },
 
         onSelectTab: function(oEvent){
-            const oRouter = this.getOwnerComponent().getRouter();
+            let sTargetRoute = "home";
             const sKey = oEvent.getParameter("key");
-
-            const sCurrentView = this.oView.sViewName.split('.').at(-1)
-            const oNavigateAction = this.oStartPageActions.navigateTo({sView: sKey, sOldView: sCurrentView});
-            this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
 
             switch(sKey){
                 case "Startpage":
-                    oRouter.navTo("home");
+                    sTargetRoute = "home";
                     break;
                 case "Profile":
-                    oRouter.navTo("profile");
+                    sTargetRoute = "profile";
                     break;
             }
+
+            const sCurrentView = this.oView.sViewName.split('.').at(-1)
+            const oNavigateAction = this.oStartPageActions.navigateTo({sView: sKey, sOldView: sCurrentView, sTargetRoute: sTargetRoute});
+            this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
+
+            
         },
     });
  });

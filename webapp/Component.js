@@ -40,23 +40,19 @@ sap.ui.define([
                         },
                     },
                     uiState: {
-                        StartpageView:{
-                            visible: true
-                        },
-                        AthleteDetailsView:{
-                            visible: false
-                        },
-                        ProfileView:{
-                            visible: false
-                        }
+                       activeRoute: "home"
                     },
                 };
                 // instantiate store with initState
                 const store = new Store(initState);
                 this.reduxStore = store.store;
-                this.reduxStore.subscribe(() =>
+
+
+                this.reduxStore.subscribe(() =>{
                     console.log('State after dispatch: ', this.reduxStore.getState())
-                  )
+                    this.getRouter().navTo(this.reduxStore.getState().uiState.activeRoute);
+                }
+                )
 
             });
         

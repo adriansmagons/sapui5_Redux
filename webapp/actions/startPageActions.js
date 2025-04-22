@@ -11,12 +11,13 @@ sap.ui.define(["sap/ui/base/Object",
                 }
             }
         },
-        navigateTo: function ({sView, sOldView}) {
+        navigateTo: function ({sView, sOldView, sTargetRoute}) {
             return{
                 type: 'NAVIGATE_TO',
                 payload: {
                     oldView: sOldView + "View",
-                    view: sView + "View"
+                    view: sView + "View",
+                    sTargetRoute: sTargetRoute
                 }
             }
         },
