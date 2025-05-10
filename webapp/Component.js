@@ -4,7 +4,14 @@ sap.ui.define([
    "sap/ui/model/resource/ResourceModel",
    "ui5/fitnessApp/utils/DataPreprocessor",
    "ui5/fitnessApp/store",
-], (UIComponent, JSONModel, ResourceModel, DataPreprocessor, Store) => {
+   "sap/ui/model/Sorter",
+   "sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
+	"sap/ui/model/FilterType",
+    "ui5/fitnessApp/selectors/appStateSelectors",
+    "ui5/fitnessApp/selectors/athleteSelectors",
+    "ui5/fitnessApp/selectors/uiStateSelectors",
+], (UIComponent, JSONModel, ResourceModel, DataPreprocessor, Store, Sorter, Filter, FilterOperator, FilterType, appStateSelectors, athleteSelectors, uiStateSelectors) => {
     "use strict";
  
     return UIComponent.extend("ui5.fitnessApp.Component", {
@@ -32,15 +39,28 @@ sap.ui.define([
 
                 // create initial state for store and instantiate store
                 const initState = {
-                    athletes: preprocessor.processAthletes(result),
+                    athletes: preprocessor.processAthletes(result),    // Tip: Figure out what variables are needed for subscribe() callback and somehow represent these variables in state
                     appState: {
-                        athleteDetails: {},
-                        startPage: {
-                            surname_sorting: "default",
+                        AthleteDetails: {
+                            table:{
+                                table_id: "sessions_table",
+                                sort_by: "",
+                                sortingOrder: null,
+                            },
+                        },
+                        Startpage: {
+                            table:{
+                                table_id: "players_table",
+                                sort_by: "",
+                                sortingOrder: null,
+                                search_by_surname: null
+                            },
                         },
                     },
                     uiState: {
-                       activeRoute: "home"
+                        activeRoute: "home",
+                        activeView: "Startpage",    // TODO: Change active view on router navigation
+                        routeParameters: {}
                     },
                 };
                 // instantiate store with initState
@@ -50,9 +70,24 @@ sap.ui.define([
 
                 this.reduxStore.subscribe(() =>{
                     console.log('State after dispatch: ', this.reduxStore.getState())
-                    this.getRouter().navTo(this.reduxStore.getState().uiState.activeRoute);
-                }
-                )
+                    const oState = this.reduxStore.getState();
+                    this.getRouter().navTo(uiStateSelectors.selectActiveRoute(oState), uiStateSelectors.selectRouteParameters(oState));
+
+                    const activeView = oState.uiState.activeView;
+                    switch (activeView){
+                        case "Startpage":
+                            this._updateStartpageView(oState);
+                            break;
+                        
+                        case "AthleteDetails":
+                            this._updateAthleteDetailsView(oState);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
+                })
 
             });
         
@@ -63,6 +98,55 @@ sap.ui.define([
              
             this.getRouter().initialize();
 		},
+        registerStartpageView(oView) {
+            this.oStartpageView = oView;
+        },
+        registerAthleteView(oView) {
+            this.oAthleteDetailsView = oView;
+        },
+
+        _updateStartpageView(oState){
+            let sPlayerTableId = appStateSelectors.selectTableId(oState, "Startpage");
+            let sPlayerTableSortBy = appStateSelectors.selectTableSortBy(oState, "Startpage");
+            let sPlayerTableSortOrder = appStateSelectors.selectTableSortOrder(oState, "Startpage");
+            this._sortTable(sPlayerTableId, sPlayerTableSortOrder, sPlayerTableSortBy, this.oStartpageView);
+
+            const oTable = this.oStartpageView.byId(sPlayerTableId);
+            const oBinding = oTable.getBinding("items");
+            const sQuery = oState.appState.startPage.table.search_by_surname;  // too weird, change
+            let aFilters = [];
+            if (sQuery && sQuery.length > 0) {
+                var filter = new Filter("surname", FilterOperator.Contains, sQuery);
+                aFilters.push(filter);
+            }
+            // update list binding
+            oBinding.filter(aFilters, "Application");  
+            // FIX refresh
+        },
+
+        _updateAthleteDetailsView(oState){
+            let sSessionsTableId = appStateSelectors.selectTableId(oState, "AthleteDetails");
+            let sSessionsTableSortBy = appStateSelectors.selectTableSortBy(oState, "AthleteDetails");
+            let sSessionsTableSortOrder = appStateSelectors.selectTableSortOrder(oState, "AthleteDetails");
+            this._sortTable(sSessionsTableId, sSessionsTableSortOrder, sSessionsTableSortBy, this.oAthleteDetailsView);    
+        },
+
+        _sortTable(sTableId, sSortOrder, sSortBy, oView){
+            const oTable = oView.byId(sTableId);
+            const aColumns = oTable.getColumns();
+            const oSortColumn = aColumns[1];
+            const oBinding = oTable.getBinding("items");
+                    if (sSortOrder === "Ascending") {
+                        oBinding.sort([new Sorter(sSortBy, false)]);
+                        oSortColumn.setSortIndicator("Ascending");
+                    } else if (sSortOrder === "Descending") {
+                        oBinding.sort([new Sorter(sSortBy, true)]);
+                        oSortColumn.setSortIndicator("Descending");
+                    } else {
+                        oBinding.sort(sSortOrder);
+                        oSortColumn.setSortIndicator("None");
+                    }
+        }
 
     });
  });

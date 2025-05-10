@@ -1,7 +1,8 @@
 sap.ui.define([], function() {
     
-    function athleteReducer (state = {a: "something"}, action) {
+    function athleteReducer (state = {}, action) {
             switch (action.type) {
+
                 default: 
                     return state
             }

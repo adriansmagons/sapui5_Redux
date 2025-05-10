@@ -12,6 +12,10 @@
     <Page title="Athlete details">
 
         <content>
+		<core:Icon
+            src="sap-icon://hello-world"
+            size="8rem"
+            class="sapUiMediumMargin"/>
 			<ObjectHeader
 				title="{athleteModel>name} {athleteModel>surname}"
 				backgroundDesign="Solid"
@@ -24,10 +28,12 @@
 				<attributes>
 					<ObjectAttribute title="Age" text="{athleteModel>age}" />
 					<ObjectAttribute title="Position" text="{athleteModel>position}" />
+					
 				</attributes>
 				<statuses>
 					<ObjectStatus title="Activity right now" text="Resting" state="Success" />
 				</statuses>
+				
 			</ObjectHeader>
 			<IconTabBar
 				class="sapUiSmallMarginBottom sapUiResponsiveContentPadding">
@@ -35,7 +41,7 @@
 					<IconTabFilter
 						key="training"
 						text="Training log">
-						<Table headerText="Training sessions" width="auto" class="sapUiResponsiveMargin" items="{athleteModel>trainingSessions}">
+						<Table id="sessions_table" headerText="Training sessions" width="auto" class="sapUiResponsiveMargin" items="{athleteModel>trainingSessions}">
 							<columns>
 								<Column>
 									<Text text="ID"></Text>

@@ -8,41 +8,42 @@ sap.ui.define([
 	"sap/ui/model/FilterType",
     'sap/m/MessageToast',
     "ui5/fitnessApp/actions/startPageActions",
+    "ui5/fitnessApp/actions/commonActions",
     "sap/m/table/columnmenu/MenuBase",
     "sap/m/table/columnmenu/Menu",
     "sap/m/table/columnmenu/QuickSort",
     "sap/m/table/columnmenu/QuickSortItem",
     "sap/m/Menu",
     "sap/m/MenuItem",
- ], (Controller, JSONModel, Sorter, Filter, FilterOperator, FilterType,MessageToast, startPageActions, MenuBase, ColumnMenu, QuickSort, QuickSortItem, Menu, MenuItem) => {
+ ], (Controller, JSONModel, Sorter, Filter, FilterOperator, FilterType,MessageToast, startPageActions, commonActions, MenuBase, ColumnMenu, QuickSort, QuickSortItem, Menu, MenuItem) => {
     "use strict";
  
     return Controller.extend("ui5.fitnessApp.controller.Startpage", {
     
         onInit: function () {
+            this.getOwnerComponent().registerStartpageView(this.getView()); // register this view in component js
+
             this.oStartPageActions = new startPageActions();
+            this.oCommonActions = new commonActions();
             this.createSurnameSort();
         },
 
-        onAthletePress: function (oEvent) {
-            const sCurrentView = this.oView.sViewName.split('.').at(-1)
-            const oNavigateAction = this.oStartPageActions.navigateTo({sView: "AthleteDetails", sOldView: sCurrentView});
-            this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
-
+        onAthletePress: function (oEvent) {  // FIX: implement redux, from other computer
             document.activeElement.blur();
 
             let oContext = oEvent.getSource().getBindingContext("athleteModel");
-            let sAthleteId = oContext.getProperty("_id");
-            const oRouter = this.getOwnerComponent().getRouter();
-			oRouter.navTo("athleteDetails", {
-                athletePath: window.encodeURIComponent(oContext.getPath().substring(1))
-            });
+            let sAthleteId = oContext.getProperty("_id");  // Gets clicked athlete id
+            let sTargetRoute = "athleteDetails";
+            let sRouteParameters = {athletePath: window.encodeURIComponent(oContext.getPath().substring(1))};
+
+            const sCurrentView = this.oView.sViewName.split('.').at(-1)
+            const oNavigateAction = this.oCommonActions.navigateTo({sView: "AthleteDetails", sOldView: sCurrentView, sTargetRoute: sTargetRoute, sRouteParameters: sRouteParameters});
+            this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
         },
 
         onSelectTab: function(oEvent){
             let sTargetRoute = "home";
             const sKey = oEvent.getParameter("key");
-            debugger
 
             switch(sKey){
                 case "Startpage":
@@ -54,11 +55,10 @@ sap.ui.define([
             }
 
             const sCurrentView = this.oView.sViewName.split('.').at(-1)
-            const oNavigateAction = this.oStartPageActions.navigateTo({sView: sKey, sOldView: sCurrentView, sTargetRoute: sTargetRoute});
+            const oNavigateAction = this.oCommonActions.navigateTo({sView: sKey, sOldView: sCurrentView, sTargetRoute: sTargetRoute});
             this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
-
-            
         },
+
         createSurnameSort: function(){
             const oTable = this.getView().byId("players_table");
 			const aColumns = oTable.getColumns();
@@ -72,40 +72,25 @@ sap.ui.define([
 							label: "Surname"
 						}),
 						change: function(oEvent) {
-							const oBinding = oTable.getBinding("items");
-							const sSortOrder = oEvent.getParameter("item").getSortOrder();
-							if (sSortOrder === "Ascending") {
-								oBinding.sort([new Sorter("surname", false)]);
-								oSurnameColumn.setSortIndicator("Ascending");
-							} else if (sSortOrder === "Descending") {
-								oBinding.sort([new Sorter("surname", true)]);
-								oSurnameColumn.setSortIndicator("Descending");
-							} else {
-								oSurnameColumn.setSortIndicator("None");
-							}
-						}
+                            // Dispatch action here
+                            const sSortOrder = oEvent.getParameter("item").getSortOrder();
+							const oSortTableAction = this.oCommonActions.sortTable({sOrder: sSortOrder, sSortBy: "surname", sTableId: "players_table", sView: "Startpage"});
+                            this.getOwnerComponent().reduxStore.dispatch(oSortTableAction);
+						}.bind(this)
 					})
 				]
 			}));
 
         },
         onSearch: function(oEvent){
-            var aFilters = [];
-			var sQuery = oEvent.getSource().getValue();
-			if (sQuery && sQuery.length > 0) {
-				var filter = new Filter("surname", FilterOperator.Contains, sQuery);
-				aFilters.push(filter);
-			}
-
-			// update list binding
-			var oList = this.byId("players_table");
-			var oBinding = oList.getBinding("items");
-			oBinding.filter(aFilters, "Application");
+            let sQuery = oEvent.getSource().getValue();
+            const oSearchAction = this.oStartPageActions.searchBySurname({sQuery: sQuery});
+            this.getOwnerComponent().reduxStore.dispatch(oSearchAction);
         },
+        
         onRefresh: function(){
-            const oTable = this.getView().byId("players_table");
-            const oBinding = oTable.getBinding("items");
-            oBinding.sort(null);
+            const oRefreshAction = this.oStartPageActions.refreshTable({sOrder: null, sSortBy: ""});
+            this.getOwnerComponent().reduxStore.dispatch(oRefreshAction);
         },
     });
  });

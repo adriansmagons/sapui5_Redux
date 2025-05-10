@@ -1,16 +1,24 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-    "ui5/fitnessApp/actions/startPageActions",
-], (Controller, startPageActions) => {
+    "ui5/fitnessApp/actions/commonActions",
+    "ui5/fitnessApp/actions/athleteDetailsActions",
+    "sap/m/table/columnmenu/MenuBase",
+    "sap/m/table/columnmenu/Menu",
+    "sap/m/table/columnmenu/QuickSort",
+    "sap/m/table/columnmenu/QuickSortItem",
+], (Controller, commonActions, athleteDetailsActions, MenuBase, ColumnMenu, QuickSort, QuickSortItem,) => {
 	"use strict";
 
 	return Controller.extend("ui5.fitnessApp.controller.AthleteDetails", {
 
         onInit: function () {
-            this.oStartPageActions = new startPageActions();
+            this.oAthleteDetailsActions = new athleteDetailsActions();
+            this.oCommonActions = new commonActions();
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("athleteDetails").attachPatternMatched(this.onObjectMatched, this);
-            debugger
+
+            this.getOwnerComponent().registerAthleteView(this.getView()); // register this view in component js
+            this.createDateSort();
         },
 
         onObjectMatched: function(oEvent) {
@@ -41,11 +49,31 @@ sap.ui.define([
             }
 
             const sCurrentView = this.oView.sViewName.split('.').at(-1)
-            const oNavigateAction = this.oStartPageActions.navigateTo({sView: sKey, sOldView: sCurrentView, sTargetRoute: sTargetRoute});
+            const oNavigateAction = this.oCommonActions.navigateTo({sView: sKey, sOldView: sCurrentView, sTargetRoute: sTargetRoute});
             this.getOwnerComponent().reduxStore.dispatch(oNavigateAction);
-
-            
         },
+        createDateSort: function(){
+            const oTable = this.getView().byId("sessions_table");
+			const aColumns = oTable.getColumns();
+            const oDateColumn = aColumns[1];
+
+            oDateColumn.setHeaderMenu(new ColumnMenu({
+				quickActions: [
+					new QuickSort({
+						items: new QuickSortItem({
+							key: "Date",
+							label: "Date"
+						}),
+						change: function(oEvent) {
+                            // Dispatch action here
+                            const sSortOrder = oEvent.getParameter("item").getSortOrder();
+							const oSortTableAction = this.oCommonActions.sortTable({sOrder: sSortOrder, sSortBy: "date", sTableId: "sessions_table", sView: "AthleteDetails"});
+                            this.getOwnerComponent().reduxStore.dispatch(oSortTableAction);
+						}.bind(this)
+					})
+				]
+			}));
+        }
 	});
 
 });
