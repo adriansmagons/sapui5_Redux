@@ -7,32 +7,39 @@ sap.ui.define([], function() {
                         ...state,
                         [action.payload.sView]: {
                             table:{
-                                table_id: action.payload.sTableId,
-                                sort_by: action.payload.sSortBy,
-                                sortingOrder: action.payload.sOrder
+                                ...state[action.payload.sView],
+                                sorting:{
+                                    table_id: action.payload.sTableId,
+                                    sort_by: action.payload.sSortBy,
+                                    sortingOrder: action.payload.sOrder
+                                }
                             }
                         }
                     }
                 case "REFRESH_TABLE":
                     return{
                         ...state,
-                        Startpage:{
-                            ...state.Startpage,
+                        [action.payload.sView]:{
                             table:{
-                                ...state.Startpage.table,
-                                sortingOrder: action.payload.sOrder,
-                                sort_by: action.payload.sSortBy
+                                ...state.table,
+                                sorting:{
+                                        ...state[action.payload.sView].table,
+                                        sortingOrder: action.payload.sOrder,
+                                        sort_by: action.payload.sSortBy
+                                }
                             }
                         }
                     }
-                case "SEARCH_BY_SURNAME":
+                case "SEARCH_BY":
                     return {
                         ...state,
-                        Startpage:{
-                            ...state.Startpage,
+                        [action.payload.sView]: {
                             table:{
-                                ...state.Startpage.table,
-                                search_by_surname: action.payload.sQuery
+                                ...state[action.payload.sView],
+                                search:{
+                                    search_by: action.payload.sSearchBy,
+                                    search_query: action.payload.sQuery,
+                                }
                             }
                         }
 

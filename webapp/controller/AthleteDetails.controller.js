@@ -16,8 +16,6 @@ sap.ui.define([
             this.oCommonActions = new commonActions();
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("athleteDetails").attachPatternMatched(this.onObjectMatched, this);
-
-            this.getOwnerComponent().registerAthleteView(this.getView()); // register this view in component js
             this.createDateSort();
         },
 

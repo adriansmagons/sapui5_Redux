@@ -21,8 +21,6 @@ sap.ui.define([
     return Controller.extend("ui5.fitnessApp.controller.Startpage", {
     
         onInit: function () {
-            this.getOwnerComponent().registerStartpageView(this.getView()); // register this view in component js
-
             this.oStartPageActions = new startPageActions();
             this.oCommonActions = new commonActions();
             this.createSurnameSort();
@@ -84,12 +82,12 @@ sap.ui.define([
         },
         onSearch: function(oEvent){
             let sQuery = oEvent.getSource().getValue();
-            const oSearchAction = this.oStartPageActions.searchBySurname({sQuery: sQuery});
+            const oSearchAction = this.oCommonActions.searchBySurname({sQuery: sQuery, sSearchBy: "surname", sView: "Startpage"});
             this.getOwnerComponent().reduxStore.dispatch(oSearchAction);
         },
         
         onRefresh: function(){
-            const oRefreshAction = this.oStartPageActions.refreshTable({sOrder: null, sSortBy: ""});
+            const oRefreshAction = this.oCommonActions.refreshTable({sOrder: null, sSortBy: ""});
             this.getOwnerComponent().reduxStore.dispatch(oRefreshAction);
         },
     });

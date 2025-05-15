@@ -34,11 +34,13 @@ sap.ui.define(["sap/ui/base/Object",
                 }
             }
         },
-        searchBySurname: function({sQuery}){
+        searchBySurname: function({sQuery, sSearchBy, sView}){
             return {
-                type: 'SEARCH_BY_SURNAME',
+                type: 'SEARCH_BY',
                 payload: {
-                    sQuery: sQuery
+                    sSearchBy: sSearchBy,
+                    sQuery: sQuery,
+                    sView: sView
                 }
             }
         }
