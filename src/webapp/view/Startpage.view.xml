@@ -1,0 +1,87 @@
+<mvc:View
+   controllerName="ui5.fitnessApp.controller.Startpage"
+   xmlns="sap.m"
+   xmlns:tnt="sap.tnt"
+   xmlns:mvc="sap.ui.core.mvc"
+   xmlns:t="sap.ui.table"
+   xmlns:core="sap.ui.core"
+   displayBlock="true">
+   <core:Fragment fragmentName="ui5.fitnessApp.view.fragments.NavBar" type="XML" />
+   <core:Fragment fragmentName="ui5.fitnessApp.view.fragments.AddAthleteDialog" type="XML" />
+
+
+   <Page title="Manage players">
+  
+	<content>
+		<Panel> 
+			<content>
+				<Table id="players_table" items="{athleteModel>/athletes}">
+            <headerToolbar>
+                  <OverflowToolbar>
+									<content>
+										<ToolbarSpacer/>
+										<SearchField
+											id="searchField"
+											width="20%"
+											placeholder="Search by surname"
+											search=".onSearch"/>
+										<Button
+											id="refreshAthletesBtn"
+											icon="sap-icon://refresh"
+                                 tooltip="Refresh sorting"
+											press=".onRefresh"/>
+                              <Button
+                                 id="addAthletesRow"
+                                 icon="sap-icon://add"
+                                 press=".onOpenInsertDialog"/>
+                               <ToggleButton
+                                 id="deleteAthletesRow"
+                                 icon="sap-icon://delete"
+                                 press=".toggleDeleteRow"
+                                 enabled="true"/>
+                              <Button
+                                 id="fetchFromApi"
+                                 text="Fetch from server"
+                                 press=".onFetchFromServer"/>
+									</content>
+								</OverflowToolbar>
+               </headerToolbar>
+               <columns>
+                  <Column id = "name_col">
+                     <Text text="Name"></Text>
+                  </Column>
+                  <Column id = "surname_col">
+                     <Text text="Surname"></Text>
+                  </Column>
+                  <Column id = "position_col">
+                     <Text text="Position"></Text>
+                  </Column>
+                  <Column>
+                     <Text text="Training sessions"></Text>
+                  </Column>
+               </columns>
+               <items >
+                  <ColumnListItem type="Navigation" press=".onAthletePress">
+                     <cells>
+                        <ObjectIdentifier 
+                           title="{athleteModel>name}"/>
+                        <ObjectIdentifier 
+                           title="{athleteModel>surname}"/>
+                        <ObjectIdentifier 
+                           title="{athleteModel>position}"/>
+                        <ObjectIdentifier 
+                           title="{athleteModel>trainingSessionCount}"/>
+                        <Button icon="sap-icon://delete" press=".onDeleteRow"/>    <!-- Shows up only when column is inserted-->
+                     </cells>
+                  </ColumnListItem>
+               </items>
+            </Table>
+			</content>
+		</Panel>
+	</content>
+
+   
+   </Page>
+
+   
+</mvc:View>

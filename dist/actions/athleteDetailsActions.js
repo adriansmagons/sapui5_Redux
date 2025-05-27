@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/base/Object"],function(e){return e.extend("ui5.fitnessApp.athleteDetailsActions",{sortTable:function({sOrder:e,sSortBy:t,sTableId:s}){return{}}})});
+//# sourceMappingURL=athleteDetailsActions.js.map

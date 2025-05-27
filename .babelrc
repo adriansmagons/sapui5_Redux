@@ -1,0 +1,7 @@
+{
+	"sourceMaps": "inline",
+	"presets": [
+		["transform-ui5"],
+		["@babel/preset-typescript"]
+	]
+}

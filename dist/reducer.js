@@ -1,0 +1,2 @@
+sap.ui.define(["ui5/fitnessApp/thirdparty/redux","ui5/fitnessApp/features/entitySlice","ui5/fitnessApp/features/appSlice","ui5/fitnessApp/features/uiSlice"],function(e,i,u,t){return e.combineReducers({entities:i.entityReducer,app:u.appReducer,ui:t.uiReducer})});
+//# sourceMappingURL=reducer.js.map

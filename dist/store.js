@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/base/Object","ui5/fitnessApp/thirdparty/redux","ui5/fitnessApp/thirdparty/redux-thunk","ui5/fitnessApp/reducer"],function(e,t,i,r){return e.extend("ui5.fitnessApp.store",{constructor:function(e){this.store=t.createStore(r,e,t.compose(t.applyMiddleware(i.thunk),window.__REDUX_DEVTOOLS_EXTENSION__&&window.__REDUX_DEVTOOLS_EXTENSION__()))}})});
+//# sourceMappingURL=store.js.map

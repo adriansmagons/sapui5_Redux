@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";const e=function(e={},t){switch(t.type){case"NAVIGATE_TO":{return{...e,activeRoute:t.payload.sTargetRoute,activeView:t.payload.sView,routeParameters:t.payload.sRouteParameters,currentAthlete:t.payload.nAthleteId}}case"LOADING":{return{...e,appLoading:t.payload.bLoading}}default:return e}};var t={__esModule:true};t.uiReducer=e;return t});
+//# sourceMappingURL=uiSlice.js.map

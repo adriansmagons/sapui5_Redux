@@ -2,21 +2,48 @@
   "name": "sapui5_redux",
   "version": "1.0.0",
   "description": "SAPUI5 with Redux integration",
-  "main": "index.js",
-  "scripts": {
-    "start": "ui5 serve -o index.html"
-  },
   "author": "Adrians Magons",
   "license": "ISC",
-  "devDependencies": {
-    "@ui5/cli": "^4.0.14",
-    "redux": "^5.0.1",
-    "reselect": "^5.1.1",
-    "ui5-tooling-modules": "^3.24.14"
+  "scripts": {
+    "build": "npm run build-ui5",
+    "build-ui5": "ui5 build --config ui5.yaml",
+    "watch": "npm-watch",
+    "clean": "rimraf ./dist && rimraf ./build",
+    "start": "ui5 serve -o index.html",
+    "start-2": "node ./src/server/index.mjs",
+    "unit-test": "mocha \"test/**/*.test.mjs\"",
+    "test": "npm run unit-test"
   },
-  "ui5": {
-    "dependencies": [
-      "ui5-tooling-modules"
-    ]
+  "watch": {
+    "build": "src/**/*.*"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^5.0.0",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
+    "request": "2.88.0",
+    "reselect": "^5.1.1",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.5",
+    "@types/chai-as-promised": "7.1.5",
+    "@types/mocha": "10.0.1",
+    "@types/node": "20.3.1",
+    "@types/openui5": "1.120.3",
+    "@types/sinon": "10.0.15",
+    "@ui5/cli": "^4.0.14",
+    "babel-preset-transform-ui5": "7.7.0",
+    "chai": "4.3.7",
+    "chai-as-promised": "7.1.1",
+    "mocha": "10.2.0",
+    "npm-watch": "0.13.0",
+    "rimraf": "5.0.1",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "5.4.5",
+    "ui5-tooling-modules": "^3.24.14",
+    "ui5-tooling-transpile": "3.4.0"
   }
 }

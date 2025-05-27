@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";const e=function(e={},t){switch(t.type){case"NAVIGATE_TO":{return{...e,activeRoute:t.payload.sTargetRoute,activeView:t.payload.sView,routeParameters:t.payload.sRouteParameters}}default:return e}};var t={__esModule:true};t.uiStateReducer=e;return t});
+//# sourceMappingURL=uiStateSlice.js.map

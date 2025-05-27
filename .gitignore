@@ -1,1 +1,23 @@
+# Ignore IDE project and settings files
+.classpath
+.settings
+.project
+.idea/
+
+# Ignore Mac files
+.DS_Store
+
+# Ignore node_modules
+**/node_modules/**
 node_modules
+
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Ignore intermediate & temporary files, cache 
+.tscache
+.turbo
+*.tmp.*
+
+# Ignoe UI5 Tooling environment 
+.ui5 

@@ -1,0 +1,22 @@
+<Dialog xmlns="sap.m" title="Edit player list" id="idInsertDialog" >
+    <content>
+        <VBox >
+            <items>
+                <Input description="Name" id="nameInput"></Input>
+                <Input description="Surname" id="surnameInput"></Input>
+                <Input description="Position" id="positionInput"></Input>
+                <Input description="Age" id="ageInput"></Input>
+                <Input description="Gender" id="genderInput"></Input>
+            </items>
+        </VBox>
+    </content>
+
+    <beginButton>
+        <Button type="Emphasized" text="Insert" press=".onInsertRow"></Button>
+    </beginButton>
+    <endButton>
+        <Button text="Cancel" type="Reject" press=".onCloseInsertDialog"></Button>
+    </endButton>
+    
+</Dialog>
+    

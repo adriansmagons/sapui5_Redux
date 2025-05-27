@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/base/Object","ui5/fitnessApp/thirdparty/reselect","ui5/fitnessApp/selectors/athleteSelectors"],function(e,t,i){return e.extend("ui5.fitnessApp.selectors.uiStateSelectors",{constructor:function(){},selectActiveView:function(e){return e.uiState.activeView},selectActiveRoute:function(e){return e.uiState.activeRoute},selectRouteParameters:function(e){return e.uiState.routeParameters}})});
+//# sourceMappingURL=uiStateSelectors.js.map
